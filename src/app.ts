@@ -36,6 +36,8 @@ const allowedOrigins = [
   "https://topdealsbd.com/",
   "https://topdealsbd.com",
   "https://www.topdealsbd.com",
+  "https://needonlineshop.com",
+  "https://www.needonlineshop.com",
 ];
 
 app.use(

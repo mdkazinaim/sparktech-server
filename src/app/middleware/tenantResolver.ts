@@ -11,6 +11,9 @@ const TENANT_MAP: Record<string, string> = {
   
   'https://topdealsbd.com': 'TopDealsBd',
   'https://www.topdealsbd.com': 'TopDealsBd',
+
+  'https://needonlineshop.com': 'needonlineshop',
+  'https://www.needonlineshop.com': 'needonlineshop',
 };
 
 // Extend Express Request to include tenant info
