@@ -7,6 +7,9 @@ exports.SettingsRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const settings_controller_1 = require("./settings.controller");
 const tenantResolver_1 = require("../../app/middleware/tenantResolver");
+const multer_1 = __importDefault(require("multer"));
+const storage = multer_1.default.memoryStorage();
+const upload = (0, multer_1.default)({ storage });
 const router = express_1.default.Router();
 // Public route to fetch settings (needed for frontend initialization)
 // Middleware tenantResolver ensures we connect to the right DB
@@ -15,5 +18,10 @@ router.get('/', tenantResolver_1.tenantResolver, settings_controller_1.SettingsC
 router.patch('/theme', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.updateActiveTheme);
 router.post('/theme', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.addCustomTheme);
 router.delete('/theme/:id', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.deleteCustomTheme);
-router.patch('/admin-info', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.updateAdminInfo);
+router.patch('/admin-info', tenantResolver_1.tenantResolver, upload.single("logo"), (req, res, next) => {
+    if (req.file) {
+        req.body.logo = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+    }
+    next();
+}, settings_controller_1.SettingsController.updateAdminInfo);
 exports.SettingsRoutes = router;

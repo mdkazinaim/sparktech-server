@@ -9,13 +9,19 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const TENANT_MAP = {
     'https://bestbuy4ubd.com': 'SparkTek',
     'https://www.bestbuy4ubd.com': 'SparkTek',
+    'http://bestbuy4ubd.com': 'SparkTek',
+    'http://www.bestbuy4ubd.com': 'SparkTek',
     'http://localhost:5173': 'SparkTek', // Default for local development
     'http://localhost:5174': 'TopDealsBd',
     'https://spark-tech-seven.vercel.app': 'SparkTek',
     'https://topdealsbd.com': 'TopDealsBd',
     'https://www.topdealsbd.com': 'TopDealsBd',
+    'http://topdealsbd.com': 'TopDealsBd',
+    'http://www.topdealsbd.com': 'TopDealsBd',
     'https://needonlineshop.com': 'needonlineshop',
     'https://www.needonlineshop.com': 'needonlineshop',
+    'http://needonlineshop.com': 'needonlineshop',
+    'http://www.needonlineshop.com': 'needonlineshop',
 };
 const tenantResolver = (req, res, next) => {
     const origin = req.headers.origin || req.headers.referer;

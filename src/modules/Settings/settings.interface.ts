@@ -20,6 +20,7 @@ export interface ITheme {
 export interface IAdminInfo {
   name: string;
   siteName: string;
+  logo?: string;
   information: string;
   contact: string;
   email: string;

@@ -22,7 +22,8 @@ const ThemeSchema = new Schema<ITheme>({
 
 const AdminInfoSchema = new Schema({
   name: { type: String, default: 'Admin' },
-  siteName: { type: String, default: 'BestBuy4uBd' },
+  siteName: { type: String, default: 'Need Online Shop' },
+  logo: { type: String, default: '' },
   information: { type: String, default: '' },
   contact: { type: String, default: '' },
   email: { type: String, default: '' },
