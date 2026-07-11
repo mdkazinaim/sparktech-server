@@ -25,8 +25,14 @@ const tenantResolver = (req, res, next) => {
         req.tenantDb = mongoose_1.default.connection.useDb('SparkTek');
         return next();
     }
-    // Remove trailing slash and query params for matching
-    const cleanOrigin = origin.split('?')[0].replace(/\/$/, '');
+    let cleanOrigin = origin;
+    try {
+        const url = new URL(origin);
+        cleanOrigin = `${url.protocol}//${url.host}`;
+    }
+    catch (e) {
+        cleanOrigin = origin.split('?')[0].replace(/\/$/, '');
+    }
     // Find matching tenant
     const dbName = TENANT_MAP[cleanOrigin] || 'SparkTek'; // Default fallback
     req.dbName = dbName;
