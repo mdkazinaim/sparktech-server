@@ -156,6 +156,7 @@ const updateAdminInfo = (req, adminInfoData) => __awaiter(void 0, void 0, void 0
     const Settings = (0, getTenantModel_1.getTenantModel)(req, 'Settings', settings_model_1.SettingsModel.schema);
     const settings = yield (0, exports.getSettings)(req);
     settings.adminInfo = Object.assign(Object.assign({}, settings.adminInfo), adminInfoData);
+    settings.markModified('adminInfo');
     yield settings.save();
     return settings;
 });

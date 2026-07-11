@@ -159,6 +159,7 @@ export const updateAdminInfo = async (req: Request, adminInfoData: any) => {
   const settings = await getSettings(req);
   
   settings.adminInfo = { ...settings.adminInfo, ...adminInfoData };
+  settings.markModified('adminInfo');
   await settings.save();
   return settings;
 };
