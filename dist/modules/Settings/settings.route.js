@@ -15,4 +15,5 @@ router.get('/', tenantResolver_1.tenantResolver, settings_controller_1.SettingsC
 router.patch('/theme', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.updateActiveTheme);
 router.post('/theme', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.addCustomTheme);
 router.delete('/theme/:id', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.deleteCustomTheme);
+router.patch('/admin-info', tenantResolver_1.tenantResolver, settings_controller_1.SettingsController.updateAdminInfo);
 exports.SettingsRoutes = router;

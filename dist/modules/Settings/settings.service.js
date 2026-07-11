@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SettingsService = exports.deleteCustomTheme = exports.addCustomTheme = exports.updateActiveTheme = exports.getSettings = void 0;
+exports.SettingsService = exports.updateAdminInfo = exports.deleteCustomTheme = exports.addCustomTheme = exports.updateActiveTheme = exports.getSettings = void 0;
 const settings_model_1 = require("./settings.model");
 const getTenantModel_1 = require("../../app/utils/getTenantModel");
 // Default presets to initialize if none exist
@@ -152,9 +152,18 @@ const deleteCustomTheme = (req, themeId) => __awaiter(void 0, void 0, void 0, fu
     return settings;
 });
 exports.deleteCustomTheme = deleteCustomTheme;
+const updateAdminInfo = (req, adminInfoData) => __awaiter(void 0, void 0, void 0, function* () {
+    const Settings = (0, getTenantModel_1.getTenantModel)(req, 'Settings', settings_model_1.SettingsModel.schema);
+    const settings = yield (0, exports.getSettings)(req);
+    settings.adminInfo = Object.assign(Object.assign({}, settings.adminInfo), adminInfoData);
+    yield settings.save();
+    return settings;
+});
+exports.updateAdminInfo = updateAdminInfo;
 exports.SettingsService = {
     getSettings: exports.getSettings,
     updateActiveTheme: exports.updateActiveTheme,
     addCustomTheme: exports.addCustomTheme,
-    deleteCustomTheme: exports.deleteCustomTheme
+    deleteCustomTheme: exports.deleteCustomTheme,
+    updateAdminInfo: exports.updateAdminInfo
 };

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SettingsController = exports.deleteCustomTheme = exports.addCustomTheme = exports.updateActiveTheme = exports.getSettings = void 0;
+exports.SettingsController = exports.updateAdminInfo = exports.deleteCustomTheme = exports.addCustomTheme = exports.updateActiveTheme = exports.getSettings = void 0;
 const settings_service_1 = require("./settings.service");
 const getSettings = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -81,9 +81,26 @@ const deleteCustomTheme = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.deleteCustomTheme = deleteCustomTheme;
+const updateAdminInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const settings = yield settings_service_1.SettingsService.updateAdminInfo(req, req.body);
+        res.status(200).json({
+            success: true,
+            data: settings
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+exports.updateAdminInfo = updateAdminInfo;
 exports.SettingsController = {
     getSettings: exports.getSettings,
     updateActiveTheme: exports.updateActiveTheme,
     addCustomTheme: exports.addCustomTheme,
-    deleteCustomTheme: exports.deleteCustomTheme
+    deleteCustomTheme: exports.deleteCustomTheme,
+    updateAdminInfo: exports.updateAdminInfo
 };

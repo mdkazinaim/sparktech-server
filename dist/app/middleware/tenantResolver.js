@@ -14,6 +14,8 @@ const TENANT_MAP = {
     'https://spark-tech-seven.vercel.app': 'SparkTek',
     'https://topdealsbd.com': 'TopDealsBd',
     'https://www.topdealsbd.com': 'TopDealsBd',
+    'https://needonlineshop.com': 'needonlineshop',
+    'https://www.needonlineshop.com': 'needonlineshop',
 };
 const tenantResolver = (req, res, next) => {
     const origin = req.headers.origin || req.headers.referer;

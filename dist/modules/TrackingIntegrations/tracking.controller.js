@@ -19,11 +19,19 @@ const sendResponse_1 = __importDefault(require("../../app/utils/sendResponse"));
 const tracking_service_1 = require("./tracking.service");
 const getTrackingSettings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield tracking_service_1.TrackingServices.getTrackingSettings(req);
+    // Mask secret keys so they are not exposed to the frontend/public
+    const data = result.toObject ? result.toObject() : JSON.parse(JSON.stringify(result));
+    if (data.facebookAccessToken)
+        data.facebookAccessToken = "**********";
+    if (data.steadfastApiKey)
+        data.steadfastApiKey = "**********";
+    if (data.steadfastSecretKey)
+        data.steadfastSecretKey = "**********";
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Tracking settings retrieved successfully",
-        data: result,
+        data: data,
     });
 }));
 const updateTrackingSettings = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

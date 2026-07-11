@@ -38,6 +38,8 @@ const allowedOrigins = [
     "https://topdealsbd.com/",
     "https://topdealsbd.com",
     "https://www.topdealsbd.com",
+    "https://needonlineshop.com",
+    "https://www.needonlineshop.com",
 ];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {

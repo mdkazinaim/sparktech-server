@@ -24,6 +24,13 @@ const getTrackingSettings = (req) => __awaiter(void 0, void 0, void 0, function*
 const updateTrackingSettings = (req, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const Tracking = (0, getTenantModel_1.getTenantModel)(req, 'Tracking', tracking_model_1.trackingSchema);
     let settings = yield Tracking.findOne();
+    // Prevent masked values from overwriting the real keys
+    if (payload.facebookAccessToken === "**********")
+        delete payload.facebookAccessToken;
+    if (payload.steadfastApiKey === "**********")
+        delete payload.steadfastApiKey;
+    if (payload.steadfastSecretKey === "**********")
+        delete payload.steadfastSecretKey;
     if (!settings) {
         settings = yield Tracking.create(payload);
     }
