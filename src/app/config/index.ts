@@ -4,13 +4,13 @@ dotenv.config({path:path.join(process.cwd(),'.env')})
 
 export default {
     NODE_ENV:process.env.NODE_ENV,
-    port:process.env.port,
-    db:process.env.db,
-    jwt_access_secret : process.env.jwt_access_secret,
-    jwt_access_expires_in : process.env.jwt_access_expires_in,
-    jwt_refresh_secret : process.env.jwt_refresh_secret,
-    jwt_refresh_expires_in : process.env.jwt_refresh_expires_in,
-    bcrypt_salt_rounds : process.env.bcrypt_salt_rounds,
+    port:process.env.port || process.env.PORT || 5000,
+    db:process.env.db || process.env.DB || process.env.MONGODB_URI,
+    jwt_access_secret : process.env.jwt_access_secret || process.env.JWT_ACCESS_SECRET || "sparktech_jwt_access_secret_key_2026_safe_fallback",
+    jwt_access_expires_in : process.env.jwt_access_expires_in || process.env.JWT_ACCESS_EXPIRES_IN || "7d",
+    jwt_refresh_secret : process.env.jwt_refresh_secret || process.env.JWT_REFRESH_SECRET || "sparktech_jwt_refresh_secret_key_2026_safe_fallback",
+    jwt_refresh_expires_in : process.env.jwt_refresh_expires_in || process.env.JWT_REFRESH_EXPIRES_IN || "30d",
+    bcrypt_salt_rounds : process.env.bcrypt_salt_rounds || process.env.BCRYPT_SALT_ROUNDS || 12,
     reset_pass_ui_link : process.env.RESET_PASS_UI_LINK,
     baseURL : process.env.baseURL,
     bkash_username : process.env.bkash_username,
@@ -27,5 +27,9 @@ export default {
     steadfast:{
         apiKey:process.env.steadfast_api_key,
         baseUrl:process.env.steadfast_base_url,
+    },
+    google:{
+        clientId:process.env.GOOGLE_CLIENT_ID,
+        clientSecret:process.env.GOOGLE_CLIENT_SECRET,
     }
 }

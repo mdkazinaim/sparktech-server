@@ -31,10 +31,16 @@ const resetPasswordValidationSchema = zod_1.z.object({
         confirmPassword: zod_1.z.string({ message: 'Confirm password is required' }),
     }),
 });
+const googleLoginValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        idToken: zod_1.z.string({ message: 'Google ID Token is required' }),
+    }),
+});
 exports.AuthValidation = {
     loginValidationSchema,
     changePasswordValidationSchema,
     refreshTokenValidationSchema,
     forgetPasswordValidationSchema,
     resetPasswordValidationSchema,
+    googleLoginValidationSchema,
 };

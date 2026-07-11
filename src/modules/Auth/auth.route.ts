@@ -13,6 +13,12 @@ router.post(
 );
 
 router.post(
+  "/google-login",
+  validateRequest(AuthValidation.googleLoginValidationSchema),
+  AuthControllers.googleLogin
+);
+
+router.post(
   "/change-password",
   auth(USER_ROLE.ADMIN as 'ADMIN', USER_ROLE.USER as 'USER'),
   validateRequest(AuthValidation.changePasswordValidationSchema),  

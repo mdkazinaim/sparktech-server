@@ -70,8 +70,8 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const forgetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = req.body.id;
-    const result = yield auth_service_1.AuthServices.forgetPassword(req, userId);
+    const email = req.body.email;
+    const result = yield auth_service_1.AuthServices.forgetPassword(req, email);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -92,10 +92,30 @@ const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
+const googleLogin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.AuthServices.googleLogin(req, req.body);
+    const { refreshToken, accessToken, needsPasswordChange } = result;
+    res.cookie('refreshToken', refreshToken, {
+        secure: config_1.default.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User is logged in successfully!',
+        data: {
+            accessToken,
+            needsPasswordChange,
+        },
+    });
+}));
 exports.AuthControllers = {
     loginUser,
     changePassword,
     refreshToken,
     forgetPassword,
     resetPassword,
+    googleLogin,
 };

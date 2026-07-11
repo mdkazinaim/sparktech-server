@@ -28,6 +28,10 @@ const moduleRoute = [
         route: UserRoutes
     },
     {
+        path: '/users',
+        route: UserRoutes
+    },
+    {
         path: '/auth',
         route: AuthRoute
     },

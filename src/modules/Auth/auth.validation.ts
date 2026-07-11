@@ -34,10 +34,17 @@ const resetPasswordValidationSchema = z.object({
   }),
 });
 
+const googleLoginValidationSchema = z.object({
+  body: z.object({
+    idToken: z.string({ message: 'Google ID Token is required' }),
+  }),
+});
+
 export const AuthValidation = {
   loginValidationSchema,
   changePasswordValidationSchema,
   refreshTokenValidationSchema,
   forgetPasswordValidationSchema,
   resetPasswordValidationSchema,
+  googleLoginValidationSchema,
 };

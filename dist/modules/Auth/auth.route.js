@@ -12,6 +12,7 @@ const auth_validation_1 = require("./auth.validation");
 const auth_controller_1 = require("./auth.controller");
 const router = (0, express_1.Router)();
 router.post("/login", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginValidationSchema), auth_controller_1.AuthControllers.loginUser);
+router.post("/google-login", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.googleLoginValidationSchema), auth_controller_1.AuthControllers.googleLogin);
 router.post("/change-password", (0, auth_1.default)(user_constant_1.USER_ROLE.ADMIN, user_constant_1.USER_ROLE.USER), (0, validateRequest_1.default)(auth_validation_1.AuthValidation.changePasswordValidationSchema), auth_controller_1.AuthControllers.changePassword);
 router.post("/refresh-token", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.refreshTokenValidationSchema), auth_controller_1.AuthControllers.refreshToken);
 router.post("/forget-password", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.forgetPasswordValidationSchema), auth_controller_1.AuthControllers.forgetPassword);

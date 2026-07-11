@@ -53,8 +53,8 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 const forgetPassword = catchAsync(async (req, res) => {
-  const userId = req.body.id;
-  const result = await AuthServices.forgetPassword(req, userId);
+  const email = req.body.email;
+  const result = await AuthServices.forgetPassword(req, email);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -79,10 +79,32 @@ const resetPassword = catchAsync(async (req, res) => {
   });
 });
 
+const googleLogin = catchAsync(async (req, res) => {
+  const result = await AuthServices.googleLogin(req, req.body);
+  const { refreshToken, accessToken, needsPasswordChange } = result;
+  res.cookie('refreshToken', refreshToken, {
+    secure: config.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: true,
+    maxAge: 1000 * 60 * 60 * 24 * 365,
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is logged in successfully!',
+    data: {
+      accessToken,
+      needsPasswordChange,
+    },
+  });
+});
+
 export const AuthControllers = {
   loginUser,
   changePassword,
   refreshToken,
   forgetPassword,
   resetPassword,
+  googleLogin,
 };
