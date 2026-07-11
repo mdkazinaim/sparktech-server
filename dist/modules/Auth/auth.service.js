@@ -75,7 +75,7 @@ const changePassword = (req, userData, payload) => __awaiter(void 0, void 0, voi
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, "This user is blocked ! !");
     }
     //checking if the password is correct
-    if (!(yield UserModel.isPasswordMatched(payload.oldPassword, user === null || user === void 0 ? void 0 : user.password)))
+    if (!(yield UserModel.isPasswordMatched(payload.currentPassword, user === null || user === void 0 ? void 0 : user.password)))
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, "Password do not matched");
     //hash new password
     const newHashedPassword = yield bcrypt_1.default.hash(payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));

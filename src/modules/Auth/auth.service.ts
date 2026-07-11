@@ -71,7 +71,7 @@ const loginUser = async (req: Request, payload: TLoginUser) => {
 const changePassword = async (
   req: Request,
   userData: JwtPayload,
-  payload: { oldPassword: string; newPassword: string }
+  payload: { currentPassword: string; newPassword: string }
 ) => {
   const UserModel = getTenantModel(req, 'User', UserSchema);
   // checking if the user is exist
@@ -98,7 +98,7 @@ const changePassword = async (
 
   //checking if the password is correct
 
-  if (!(await (UserModel as any).isPasswordMatched(payload.oldPassword, user?.password)))
+  if (!(await (UserModel as any).isPasswordMatched(payload.currentPassword, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, "Password do not matched");
 
   //hash new password
