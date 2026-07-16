@@ -4,7 +4,7 @@ exports.ProductSchema = void 0;
 const mongoose_1 = require("mongoose");
 const ProductImageSchema = new mongoose_1.Schema({
     url: { type: String, required: true },
-    alt: { type: String, required: true },
+    alt: { type: String },
 }, { _id: false });
 const ProductVideoSchema = new mongoose_1.Schema({
     url: { type: String, required: true },
@@ -47,12 +47,12 @@ const ProductPriceSchema = new mongoose_1.Schema({
     selectedVariants: { type: Map, of: String },
 }, { _id: false });
 const ProductShippingDetailsSchema = new mongoose_1.Schema({
-    length: { type: Number, required: true },
-    width: { type: Number, required: true },
-    height: { type: Number, required: true },
-    weight: { type: Number, required: true },
-    dimensionUnit: { type: String, enum: ["cm", "in"], required: true },
-    weightUnit: { type: String, enum: ["kg", "lb"], required: true },
+    length: { type: Number },
+    width: { type: Number },
+    height: { type: Number },
+    weight: { type: Number },
+    dimensionUnit: { type: String, enum: ["cm", "in"] },
+    weightUnit: { type: String, enum: ["kg", "lb"] },
 }, { _id: false });
 const ProductSEOSchema = new mongoose_1.Schema({
     metaTitle: { type: String },
@@ -107,7 +107,7 @@ const productSchema = new mongoose_1.Schema({
     },
     relatedProducts: [{ type: mongoose_1.Types.ObjectId, ref: "Product" }],
     tags: [{ type: String }],
-    shippingDetails: { type: ProductShippingDetailsSchema, required: true },
+    shippingDetails: { type: ProductShippingDetailsSchema },
     additionalInfo: {
         freeShipping: { type: Boolean, default: false },
         isFeatured: { type: Boolean, default: false },

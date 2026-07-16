@@ -18,7 +18,7 @@ const ProductBasicInfoSchema = zod_1.z.object({
 // Product Images
 const ProductImageSchema = zod_1.z.object({
     url: zod_1.z.string().url(),
-    alt: zod_1.z.string()
+    alt: zod_1.z.string().optional()
 });
 // Product Variants
 const ProductVariantItemSchema = zod_1.z.object({
@@ -64,12 +64,12 @@ const ProductPriceSchema = zod_1.z.object({
 });
 // Product Shipping Details
 const ProductShippingDetailsSchema = zod_1.z.object({
-    length: zod_1.z.number().positive(),
-    width: zod_1.z.number().positive(),
-    height: zod_1.z.number().positive(),
-    weight: zod_1.z.number().positive(),
-    dimensionUnit: zod_1.z.enum(['cm', 'in']),
-    weightUnit: zod_1.z.enum(['kg', 'lb'])
+    length: zod_1.z.number().positive().optional(),
+    width: zod_1.z.number().positive().optional(),
+    height: zod_1.z.number().positive().optional(),
+    weight: zod_1.z.number().positive().optional(),
+    dimensionUnit: zod_1.z.enum(['cm', 'in']).optional(),
+    weightUnit: zod_1.z.enum(['kg', 'lb']).optional()
 });
 // Additional Product Information
 const AdditionalInfoSchema = zod_1.z.object({
@@ -101,7 +101,7 @@ const productSchemaZod = zod_1.z.object({
         rating: ProductRatingSchema.optional(),
         relatedProducts: zod_1.z.array(zod_1.z.string()).optional(),
         tags: zod_1.z.array(zod_1.z.string()),
-        shippingDetails: ProductShippingDetailsSchema,
+        shippingDetails: ProductShippingDetailsSchema.optional(),
         additionalInfo: AdditionalInfoSchema.optional(),
         seo: ProductSEOSchema.optional()
     })
