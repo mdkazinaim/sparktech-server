@@ -11,6 +11,7 @@ import { TrackingRoutes } from "../../modules/TrackingIntegrations/tracking.rout
 import { SteadfastRoutes } from "../../modules/Steadfast/steadfast.route";
 import { UserDashboardRoute } from "../../modules/UserDashboard/userDashboard.route";
 import { SettingsRoutes } from "../../modules/Settings/settings.route";
+import { VisitorRoutes } from "../../modules/VisitorTracking/visitor.route";
 
 const router = Router()
 
@@ -71,6 +72,10 @@ const moduleRoute = [
     {
         path: '/settings',
         route: SettingsRoutes
+    },
+    {
+        path: '/visitor-tracking',
+        route: VisitorRoutes
     }
 ]
 

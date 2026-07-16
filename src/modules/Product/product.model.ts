@@ -4,7 +4,7 @@ import { IProduct } from "./product.interface";
 const ProductImageSchema = new Schema(
   {
     url: { type: String, required: true },
-    alt: { type: String, required: true },
+    alt: { type: String },
   },
   { _id: false }
 );
@@ -76,12 +76,12 @@ const ProductPriceSchema = new Schema(
 
 const ProductShippingDetailsSchema = new Schema(
   {
-    length: { type: Number, required: true },
-    width: { type: Number, required: true },
-    height: { type: Number, required: true },
-    weight: { type: Number, required: true },
-    dimensionUnit: { type: String, enum: ["cm", "in"], required: true },
-    weightUnit: { type: String, enum: ["kg", "lb"], required: true },
+    length: { type: Number },
+    width: { type: Number },
+    height: { type: Number },
+    weight: { type: Number },
+    dimensionUnit: { type: String, enum: ["cm", "in"] },
+    weightUnit: { type: String, enum: ["kg", "lb"] },
   },
   { _id: false }
 );
@@ -156,7 +156,7 @@ const productSchema = new Schema<IProduct>(
     },
     relatedProducts: [{ type: Types.ObjectId, ref: "Product" }],
     tags: [{ type: String }],
-    shippingDetails: { type: ProductShippingDetailsSchema, required: true },
+    shippingDetails: { type: ProductShippingDetailsSchema },
     additionalInfo: {
       freeShipping: { type: Boolean, default: false },
       isFeatured: { type: Boolean, default: false },

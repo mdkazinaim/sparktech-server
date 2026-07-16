@@ -17,7 +17,7 @@ export interface ProductBasicInfo {
 // Product Images
 export interface ProductImage {
   url: string;
-  alt: string;
+  alt?: string;
 }
 
 // Product Videos
@@ -79,12 +79,12 @@ export interface ProductPrice {
 
 // Product Shipping Details
 export interface ProductShippingDetails {
-  length: number;
-  width: number;
-  height: number;
-  weight: number;
-  dimensionUnit: "cm" | "in";
-  weightUnit: "kg" | "lb";
+  length?: number;
+  width?: number;
+  height?: number;
+  weight?: number;
+  dimensionUnit?: "cm" | "in";
+  weightUnit?: "kg" | "lb";
 }
 
 // Additional Product Information
@@ -147,7 +147,7 @@ export interface IProduct extends Document {
   tags: string[];
 
   // Shipping Details
-  shippingDetails: ProductShippingDetails;
+  shippingDetails?: ProductShippingDetails;
 
   // Additional Information
   additionalInfo?: AdditionalInfo;

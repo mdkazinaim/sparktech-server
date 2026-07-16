@@ -17,7 +17,7 @@ const ProductBasicInfoSchema = z.object({
 // Product Images
 const ProductImageSchema = z.object({
   url: z.string().url(),
-  alt: z.string()
+  alt: z.string().optional()
 });
 
 // Product Variants
@@ -71,12 +71,12 @@ const ProductPriceSchema = z.object({
 
 // Product Shipping Details
 const ProductShippingDetailsSchema = z.object({
-  length: z.number().positive(),
-  width: z.number().positive(),
-  height: z.number().positive(),
-  weight: z.number().positive(),
-  dimensionUnit: z.enum(['cm', 'in']),
-  weightUnit: z.enum(['kg', 'lb'])
+  length: z.number().positive().optional(),
+  width: z.number().positive().optional(),
+  height: z.number().positive().optional(),
+  weight: z.number().positive().optional(),
+  dimensionUnit: z.enum(['cm', 'in']).optional(),
+  weightUnit: z.enum(['kg', 'lb']).optional()
 });
 
 // Additional Product Information
@@ -111,7 +111,7 @@ const productSchemaZod = z.object({
     rating: ProductRatingSchema.optional(),
     relatedProducts: z.array(z.string()).optional(),
     tags: z.array(z.string()),
-    shippingDetails: ProductShippingDetailsSchema,
+    shippingDetails: ProductShippingDetailsSchema.optional(),
     additionalInfo: AdditionalInfoSchema.optional(),
     seo: ProductSEOSchema.optional()
   })
