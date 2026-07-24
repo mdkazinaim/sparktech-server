@@ -74,6 +74,7 @@ export interface ProductPrice {
   discounted?: number;
   savings?: number;
   savingsPercentage?: number;
+  baseVariantName?: string;
   selectedVariants?: Map<string, string>;
 }
 

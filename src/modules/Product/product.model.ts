@@ -69,6 +69,7 @@ const ProductPriceSchema = new Schema(
     discounted: { type: Number },
     savings: { type: Number },
     savingsPercentage: { type: Number },
+    baseVariantName: { type: String },
     selectedVariants: { type: Map, of: String },
   },
   { _id: false }

@@ -66,6 +66,7 @@ const ProductPriceSchema = z.object({
   discounted: z.number().optional(),
   savings: z.number().optional(),
   savingsPercentage: z.number().optional(),
+  baseVariantName: z.string().optional(),
   selectedVariants: z.record(z.string()).optional()
 });
 

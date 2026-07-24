@@ -60,6 +60,7 @@ const ProductPriceSchema = zod_1.z.object({
     discounted: zod_1.z.number().optional(),
     savings: zod_1.z.number().optional(),
     savingsPercentage: zod_1.z.number().optional(),
+    baseVariantName: zod_1.z.string().optional(),
     selectedVariants: zod_1.z.record(zod_1.z.string()).optional()
 });
 // Product Shipping Details
