@@ -67,7 +67,8 @@ const ProductPriceSchema = z.object({
   savings: z.number().optional(),
   savingsPercentage: z.number().optional(),
   baseVariantName: z.string().optional(),
-  selectedVariants: z.record(z.string()).optional()
+  selectedVariants: z.record(z.string()).optional(),
+  image: ProductImageSchema.optional()
 });
 
 // Product Shipping Details
@@ -113,7 +114,7 @@ const productSchemaZod = z.object({
     stockStatus: z.enum(['In Stock', 'Out of Stock', 'Pre-order']),
     stockQuantity: z.number().int().nonnegative().optional(),
     sold: z.number().int().nonnegative().default(0),
-    images: z.array(ProductImageSchema).nonempty(),
+    images: z.array(ProductImageSchema).optional(),
     variants: z.array(ProductVariantSchema).optional(),
     comboPricing: z.array(ComboPricingSchemaZod).optional(),
     specifications: z.array(ProductSpecificationSchema).optional(),

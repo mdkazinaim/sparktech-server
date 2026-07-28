@@ -71,6 +71,10 @@ const ProductPriceSchema = new Schema(
     savingsPercentage: { type: Number },
     baseVariantName: { type: String },
     selectedVariants: { type: Map, of: String },
+    image: {
+      url: { type: String },
+      alt: { type: String },
+    },
   },
   { _id: false }
 );

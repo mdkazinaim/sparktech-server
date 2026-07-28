@@ -46,6 +46,10 @@ const ProductPriceSchema = new mongoose_1.Schema({
     savingsPercentage: { type: Number },
     baseVariantName: { type: String },
     selectedVariants: { type: Map, of: String },
+    image: {
+        url: { type: String },
+        alt: { type: String },
+    },
 }, { _id: false });
 const ProductShippingDetailsSchema = new mongoose_1.Schema({
     length: { type: Number },

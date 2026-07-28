@@ -61,7 +61,8 @@ const ProductPriceSchema = zod_1.z.object({
     savings: zod_1.z.number().optional(),
     savingsPercentage: zod_1.z.number().optional(),
     baseVariantName: zod_1.z.string().optional(),
-    selectedVariants: zod_1.z.record(zod_1.z.string()).optional()
+    selectedVariants: zod_1.z.record(zod_1.z.string()).optional(),
+    image: ProductImageSchema.optional()
 });
 // Product Shipping Details
 const ProductShippingDetailsSchema = zod_1.z.object({
@@ -102,7 +103,7 @@ const productSchemaZod = zod_1.z.object({
         stockStatus: zod_1.z.enum(['In Stock', 'Out of Stock', 'Pre-order']),
         stockQuantity: zod_1.z.number().int().nonnegative().optional(),
         sold: zod_1.z.number().int().nonnegative().default(0),
-        images: zod_1.z.array(ProductImageSchema).nonempty(),
+        images: zod_1.z.array(ProductImageSchema).optional(),
         variants: zod_1.z.array(ProductVariantSchema).optional(),
         comboPricing: zod_1.z.array(ComboPricingSchemaZod).optional(),
         specifications: zod_1.z.array(ProductSpecificationSchema).optional(),
