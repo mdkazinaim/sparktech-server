@@ -80,6 +80,7 @@ const ComboPricingSchema = new mongoose_1.Schema({
         enum: ["total", "per_product"],
         default: "total",
     },
+    variantValue: { type: String },
 }, { _id: false });
 const BulkPricingSchema = new mongoose_1.Schema({
     minQuantity: { type: Number, required: true },

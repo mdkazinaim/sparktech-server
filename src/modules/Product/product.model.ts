@@ -121,6 +121,7 @@ const ComboPricingSchema = new Schema(
       enum: ["total", "per_product"],
       default: "total",
     },
+    variantValue: { type: String },
   },
   { _id: false }
 );

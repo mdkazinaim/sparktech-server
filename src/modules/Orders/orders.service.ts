@@ -89,28 +89,29 @@ const addOrderData = async (req: Request, payload: OrderInterface) => {
        item.price = itemTotalExcludingBulkDocs / item.quantity;
     
     } else {
-       // STANDARD LOGIC: Unit Price = Base + Add-ons
-       let unitPrice = basePrice;
-       if (item.selectedVariants) {
-         for (const [groupName, selections] of Object.entries(item.selectedVariants)) {
-           const variantGroup = product.variants?.find((v) => v.group === groupName);
-           const selectionsArr = Array.isArray(selections) ? selections : [selections];
-   
-           for (const selection of selectionsArr) {
-             const variantItem = variantGroup?.items.find(
-               (i) => i.value === selection.value
-             );
-             if (variantItem?.price) {
-               // In standard mode, variant prices are typically additive or replacement?
-               // Based on previous code, they were additive (+=). 
-               // Assuming standard mode implies "Add-ons".
-               unitPrice += variantItem.price;
-             }
-           }
-         }
-       }
-       item.price = unitPrice;
-       itemTotalExcludingBulkDocs = unitPrice * item.quantity;
+        // STANDARD LOGIC: Unit Price = Base or Replacement Variant Price
+        let unitPrice = basePrice;
+        let selectedPrice = 0;
+        if (item.selectedVariants) {
+          for (const [groupName, selections] of Object.entries(item.selectedVariants)) {
+            const variantGroup = product.variants?.find((v) => v.group === groupName);
+            const selectionsArr = Array.isArray(selections) ? selections : [selections];
+    
+            for (const selection of selectionsArr) {
+              const variantItem = variantGroup?.items.find(
+                (i) => i.value === selection.value
+              );
+              if (variantItem?.price && variantItem.price > 0) {
+                selectedPrice = variantItem.price;
+              }
+            }
+          }
+        }
+        if (selectedPrice > 0) {
+          unitPrice = selectedPrice;
+        }
+        item.price = unitPrice;
+        itemTotalExcludingBulkDocs = unitPrice * item.quantity;
     }
 
     const itemSubtotal = itemTotalExcludingBulkDocs;
@@ -126,8 +127,27 @@ const addOrderData = async (req: Request, payload: OrderInterface) => {
     // We now strictly use comboPricing tiers
 
     if (comboPricing.length > 0) {
+       // Collect selected variant values for this item
+       const selectedVariantValues: string[] = [];
+       if (item.selectedVariants) {
+          for (const selections of Object.values(item.selectedVariants)) {
+             const selectionsArr = Array.isArray(selections) ? selections : [selections];
+             for (const selection of selectionsArr) {
+                selectedVariantValues.push(selection.value);
+             }
+          }
+       }
+
+       // Filter comboPricing based on selected variants if variantValue is specified
+       const applicableCombo = comboPricing.filter((tier: any) => {
+          if (!tier.variantValue || tier.variantValue === "") {
+             return true;
+          }
+          return selectedVariantValues.includes(tier.variantValue);
+       });
+
        // 1. Sort tiers by minQuantity descending
-       const sortedTiers = [...comboPricing].sort((a: any, b: any) => b.minQuantity - a.minQuantity);
+       const sortedTiers = [...applicableCombo].sort((a: any, b: any) => b.minQuantity - a.minQuantity);
        // 2. Find the first applicable tier
        const applicableTier = sortedTiers.find((tier: any) => item.quantity >= tier.minQuantity);
        

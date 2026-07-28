@@ -98,6 +98,14 @@ const ProductSEOSchema = z.object({
   slug: z.string().optional()
 });
 
+// Combo Pricing
+const ComboPricingSchemaZod = z.object({
+  minQuantity: z.number().int().positive(),
+  discount: z.number().nonnegative(),
+  discountType: z.enum(['total', 'per_product']).default('total'),
+  variantValue: z.string().optional()
+});
+
 const productSchemaZod = z.object({
   body: z.object({
     basicInfo: ProductBasicInfoSchema,
@@ -107,6 +115,7 @@ const productSchemaZod = z.object({
     sold: z.number().int().nonnegative().default(0),
     images: z.array(ProductImageSchema).nonempty(),
     variants: z.array(ProductVariantSchema).optional(),
+    comboPricing: z.array(ComboPricingSchemaZod).optional(),
     specifications: z.array(ProductSpecificationSchema).optional(),
     reviews: z.array(ProductReviewSchema).optional(),
     rating: ProductRatingSchema.optional(),

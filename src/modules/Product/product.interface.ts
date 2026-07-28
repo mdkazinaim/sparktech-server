@@ -111,6 +111,7 @@ export interface ComboPricing {
   minQuantity: number;
   discount: number;
   discountType?: "total" | "per_product";
+  variantValue?: string;
 }
 
 export interface BulkPricing {

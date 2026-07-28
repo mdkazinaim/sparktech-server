@@ -89,22 +89,23 @@ const addOrderData = (req, payload) => __awaiter(void 0, void 0, void 0, functio
             item.price = itemTotalExcludingBulkDocs / item.quantity;
         }
         else {
-            // STANDARD LOGIC: Unit Price = Base + Add-ons
+            // STANDARD LOGIC: Unit Price = Base or Replacement Variant Price
             let unitPrice = basePrice;
+            let selectedPrice = 0;
             if (item.selectedVariants) {
                 for (const [groupName, selections] of Object.entries(item.selectedVariants)) {
                     const variantGroup = (_b = product.variants) === null || _b === void 0 ? void 0 : _b.find((v) => v.group === groupName);
                     const selectionsArr = Array.isArray(selections) ? selections : [selections];
                     for (const selection of selectionsArr) {
                         const variantItem = variantGroup === null || variantGroup === void 0 ? void 0 : variantGroup.items.find((i) => i.value === selection.value);
-                        if (variantItem === null || variantItem === void 0 ? void 0 : variantItem.price) {
-                            // In standard mode, variant prices are typically additive or replacement?
-                            // Based on previous code, they were additive (+=). 
-                            // Assuming standard mode implies "Add-ons".
-                            unitPrice += variantItem.price;
+                        if ((variantItem === null || variantItem === void 0 ? void 0 : variantItem.price) && variantItem.price > 0) {
+                            selectedPrice = variantItem.price;
                         }
                     }
                 }
+            }
+            if (selectedPrice > 0) {
+                unitPrice = selectedPrice;
             }
             item.price = unitPrice;
             itemTotalExcludingBulkDocs = unitPrice * item.quantity;
@@ -119,8 +120,25 @@ const addOrderData = (req, payload) => __awaiter(void 0, void 0, void 0, functio
         // Legacy Bulk Pricing Logic REMOVED per user request
         // We now strictly use comboPricing tiers
         if (comboPricing.length > 0) {
+            // Collect selected variant values for this item
+            const selectedVariantValues = [];
+            if (item.selectedVariants) {
+                for (const selections of Object.values(item.selectedVariants)) {
+                    const selectionsArr = Array.isArray(selections) ? selections : [selections];
+                    for (const selection of selectionsArr) {
+                        selectedVariantValues.push(selection.value);
+                    }
+                }
+            }
+            // Filter comboPricing based on selected variants if variantValue is specified
+            const applicableCombo = comboPricing.filter((tier) => {
+                if (!tier.variantValue || tier.variantValue === "") {
+                    return true;
+                }
+                return selectedVariantValues.includes(tier.variantValue);
+            });
             // 1. Sort tiers by minQuantity descending
-            const sortedTiers = [...comboPricing].sort((a, b) => b.minQuantity - a.minQuantity);
+            const sortedTiers = [...applicableCombo].sort((a, b) => b.minQuantity - a.minQuantity);
             // 2. Find the first applicable tier
             const applicableTier = sortedTiers.find((tier) => item.quantity >= tier.minQuantity);
             if (applicableTier) {

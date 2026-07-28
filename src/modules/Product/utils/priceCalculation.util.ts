@@ -26,18 +26,39 @@ export const calculateProductPrice = (
   // 1. Determine base unit price
   const pricePerUnit = discountedPrice || basePrice;
 
-  // 2. Calculate variant prices
-  const variantTotal = selectedVariants.reduce((sum, v) => {
-    return sum + (v.price * v.quantity);
-  }, 0);
+  // 2. Calculate subtotal and variant totals using replacement pricing
+  let subtotal = 0;
+  let totalVariantQty = 0;
+  let variantTotal = 0;
 
-  // 3. Calculate subtotal
-  const subtotal = (pricePerUnit * totalQuantity) + variantTotal;
+  selectedVariants.forEach((v) => {
+    if (v.quantity > 0) {
+      const confirmPrice = v.price > 0 ? v.price : pricePerUnit;
+      subtotal += confirmPrice * v.quantity;
+      totalVariantQty += v.quantity;
+      if (v.price > 0) {
+        variantTotal += (v.price - pricePerUnit) * v.quantity;
+      }
+    }
+  });
+
+  // Handle remaining quantity (if any) that has no specific variant assigned
+  if (totalQuantity > totalVariantQty) {
+    subtotal += pricePerUnit * (totalQuantity - totalVariantQty);
+  }
 
   // 4. Apply combo discount
   let comboDiscount = 0;
   if (comboPricing && comboPricing.length > 0) {
-    const sortedCombo = [...comboPricing].sort((a, b) => b.minQuantity - a.minQuantity);
+    const selectedValues = selectedVariants.filter(v => v.quantity > 0).map(v => v.value);
+    const applicableCombo = comboPricing.filter(tier => {
+      if (!tier.variantValue || tier.variantValue === "") {
+        return true;
+      }
+      return selectedValues.includes(tier.variantValue);
+    });
+
+    const sortedCombo = [...applicableCombo].sort((a, b) => b.minQuantity - a.minQuantity);
     const tier = sortedCombo.find(t => totalQuantity >= t.minQuantity);
     if (tier) {
       comboDiscount = tier.discount;
