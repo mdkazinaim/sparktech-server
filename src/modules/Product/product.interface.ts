@@ -111,13 +111,20 @@ export interface ProductSEO {
 export interface ComboPricing {
   minQuantity: number;
   discount: number;
-  discountType?: "total" | "per_product";
+  discountType?: "total" | "per_product" | "free_delivery" | "free_delivery_inside" | "free_delivery_outside";
   variantValue?: string;
 }
 
 export interface BulkPricing {
   minQuantity: number;
   price: number;
+}
+
+export interface ProductBundle {
+  name?: string;
+  variants: string[];
+  discount: number;
+  discountType: "flat" | "percentage" | "free_delivery" | "free_delivery_inside" | "free_delivery_outside";
 }
 
 /**
@@ -131,6 +138,7 @@ export interface IProduct extends Document {
   price: ProductPrice;
   comboPricing?: ComboPricing[];
   bulkPricing?: BulkPricing[];
+  bundles?: ProductBundle[];
   stockStatus: "In Stock" | "Out of Stock" | "Pre-order";
   stockQuantity?: number;
   sold: number;

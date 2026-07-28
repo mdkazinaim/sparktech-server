@@ -93,8 +93,14 @@ const ProductSEOSchema = zod_1.z.object({
 const ComboPricingSchemaZod = zod_1.z.object({
     minQuantity: zod_1.z.number().int().positive(),
     discount: zod_1.z.number().nonnegative(),
-    discountType: zod_1.z.enum(['total', 'per_product']).default('total'),
+    discountType: zod_1.z.enum(['total', 'per_product', 'free_delivery', 'free_delivery_inside', 'free_delivery_outside']).default('total'),
     variantValue: zod_1.z.string().optional()
+});
+const BundleSchemaZod = zod_1.z.object({
+    name: zod_1.z.string().optional(),
+    variants: zod_1.z.array(zod_1.z.string()).nonempty(),
+    discount: zod_1.z.number().nonnegative(),
+    discountType: zod_1.z.enum(['flat', 'percentage', 'free_delivery', 'free_delivery_inside', 'free_delivery_outside']).default('flat')
 });
 const productSchemaZod = zod_1.z.object({
     body: zod_1.z.object({
@@ -106,6 +112,7 @@ const productSchemaZod = zod_1.z.object({
         images: zod_1.z.array(ProductImageSchema).optional(),
         variants: zod_1.z.array(ProductVariantSchema).optional(),
         comboPricing: zod_1.z.array(ComboPricingSchemaZod).optional(),
+        bundles: zod_1.z.array(BundleSchemaZod).optional(),
         specifications: zod_1.z.array(ProductSpecificationSchema).optional(),
         reviews: zod_1.z.array(ProductReviewSchema).optional(),
         rating: ProductRatingSchema.optional(),

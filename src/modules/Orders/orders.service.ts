@@ -25,6 +25,8 @@ const addOrderData = async (req: Request, payload: OrderInterface) => {
   let maxDeliveryChargeInside = 0;
   let maxDeliveryChargeOutside = 0;
   let hasFreeShipping = false;
+  let hasFreeShippingInside = false;
+  let hasFreeShippingOutside = false;
   let totalComboDiscount = 0;
 
   for (const item of payload.items) {
@@ -152,15 +154,70 @@ const addOrderData = async (req: Request, payload: OrderInterface) => {
        const applicableTier = sortedTiers.find((tier: any) => item.quantity >= tier.minQuantity);
        
        if (applicableTier) {
-         let discountAmount = 0;
-         if (applicableTier.discountType === "per_product") {
-           discountAmount = applicableTier.discount * item.quantity;
+         if (applicableTier.discountType === "free_delivery") {
+           hasFreeShipping = true;
+         } else if (applicableTier.discountType === "free_delivery_inside") {
+           hasFreeShippingInside = true;
+         } else if (applicableTier.discountType === "free_delivery_outside") {
+           hasFreeShippingOutside = true;
          } else {
-           discountAmount = applicableTier.discount; // Total discount
+           let discountAmount = 0;
+           if (applicableTier.discountType === "per_product") {
+             discountAmount = applicableTier.discount * item.quantity;
+           } else {
+             discountAmount = applicableTier.discount; // Total discount
+           }
+           // Ensure discount doesn't exceed total price
+           discountAmount = Math.min(discountAmount, itemSubtotal);
+           totalComboDiscount += discountAmount;
          }
-         // Ensure discount doesn't exceed total price
-         discountAmount = Math.min(discountAmount, itemSubtotal);
-         totalComboDiscount += discountAmount;
+       }
+    }
+
+    // Process Bundles for this product
+    const bundles = (product.toObject() as any).bundles || [];
+    if (bundles.length > 0) {
+       const selectedVariantValues: string[] = [];
+       if (item.selectedVariants) {
+          for (const selections of Object.values(item.selectedVariants)) {
+             const selectionsArr = Array.isArray(selections) ? selections : [selections];
+             for (const selection of selectionsArr) {
+                selectedVariantValues.push(selection.value);
+             }
+          }
+       }
+
+       for (const bundle of bundles) {
+         const isBundleMatched = bundle.variants.every((vVal: string) => selectedVariantValues.includes(vVal));
+         if (isBundleMatched) {
+           if (bundle.discountType === "free_delivery") {
+             hasFreeShipping = true;
+           } else if (bundle.discountType === "free_delivery_inside") {
+             hasFreeShippingInside = true;
+           } else if (bundle.discountType === "free_delivery_outside") {
+             hasFreeShippingOutside = true;
+           } else {
+             let bundleDiscount = 0;
+             if (bundle.discountType === "percentage") {
+               let combinedPrice = 0;
+               for (const vVal of bundle.variants) {
+                 let itemPrice = basePrice;
+                 for (const group of product.variants || []) {
+                   const foundItem = group.items.find((i: any) => i.value === vVal);
+                   if (foundItem?.price && foundItem.price > 0) {
+                     itemPrice = foundItem.price;
+                   }
+                 }
+                 combinedPrice += itemPrice;
+               }
+               bundleDiscount = (combinedPrice * bundle.discount) / 100;
+             } else {
+               bundleDiscount = bundle.discount;
+             }
+             bundleDiscount = Math.min(bundleDiscount, itemSubtotal);
+             totalComboDiscount += bundleDiscount;
+           }
+         }
        }
     }
 
@@ -172,7 +229,11 @@ const addOrderData = async (req: Request, payload: OrderInterface) => {
 
   // Calculate delivery
   let deliveryCharge = 0;
-  if (!hasFreeShipping) {
+  const isDeliveryFree = hasFreeShipping || 
+    (payload.courierCharge === 'insideDhaka' && hasFreeShippingInside) || 
+    (payload.courierCharge === 'outsideDhaka' && hasFreeShippingOutside);
+
+  if (!isDeliveryFree) {
     deliveryCharge = payload.courierCharge === 'insideDhaka' 
       ? (maxDeliveryChargeInside || 80) 
       : (maxDeliveryChargeOutside || 150);

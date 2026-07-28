@@ -81,7 +81,7 @@ const ComboPricingSchema = new mongoose_1.Schema({
     discount: { type: Number, required: true },
     discountType: {
         type: String,
-        enum: ["total", "per_product"],
+        enum: ["total", "per_product", "free_delivery", "free_delivery_inside", "free_delivery_outside"],
         default: "total",
     },
     variantValue: { type: String },
@@ -90,11 +90,22 @@ const BulkPricingSchema = new mongoose_1.Schema({
     minQuantity: { type: Number, required: true },
     price: { type: Number, required: true },
 }, { _id: false });
+const BundleSchema = new mongoose_1.Schema({
+    name: { type: String },
+    variants: [{ type: String, required: true }],
+    discount: { type: Number, required: true },
+    discountType: {
+        type: String,
+        enum: ["flat", "percentage", "free_delivery", "free_delivery_inside", "free_delivery_outside"],
+        default: "flat",
+    },
+}, { _id: false });
 const productSchema = new mongoose_1.Schema({
     basicInfo: { type: ProductBasicInfoSchema, required: true },
     price: { type: ProductPriceSchema, required: true },
     comboPricing: [ComboPricingSchema],
     bulkPricing: [BulkPricingSchema],
+    bundles: [BundleSchema],
     stockStatus: {
         type: String,
         enum: ["In Stock", "Out of Stock", "Pre-order"],
